@@ -105,6 +105,14 @@ const loginUser = async (req, res) => {
       expiresIn: "1h",
     });
 
+    // Set the token as an HTTP-only cookie
+    res.cookie("spv1-auth", token, {
+      httpOnly: true, // Prevent JavaScript access
+      secure: process.env.NODE_ENV === "production", // Send only over HTTPS in production
+      sameSite: "Strict",
+      maxAge: 3600000, // 1 hour
+    });
+
     // Send back the user details (excluding password) and token
     const { password: _, ...userWithoutPassword } = user;
     res.status(200).json({
@@ -144,4 +152,23 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser, getUserProfile };
+// Assign a title to a user
+const assignTitle = async (req, res) => {
+  const { title, username } = req.body; //username is the user to whom the title is to be assigned
+  const assigningUserId = req.user.id; // The userId of the user making the request
+  try {
+    const query = userQueires.assignTitleFromUsername;
+    const values = [title, assigningUserId, username];
+    const result = await db.query(query, values);
+    if (result.rowCount > 0) {
+      res.status(200).json({ message: "Title assigned successfully" });
+    } else {
+      res.status(404).json({ error: "Student not found or invalid role" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error assigning title" });
+  }
+};
+
+export { registerUser, loginUser, getUserProfile, assignTitle };

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
 import roleRoutes from "./routes/roleRoutes.js";
 import role from "./middleware/role.js";
+import cookieParser from "cookie-parser";
 
 // Load environment variables
 dotenv.config();
@@ -13,6 +14,7 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
 
 // Routes
 app.use("/api/users", userRoutes);
