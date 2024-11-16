@@ -1,6 +1,3 @@
-// const bcrypt = require('bcryptjs');
-// const jwt = require('jsonwebtoken');
-// const db = require('../config/db'); // Import the db instance
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import db from "../config/db.js";
@@ -154,16 +151,29 @@ const getUserProfile = async (req, res) => {
 
 // Assign a title to a user
 const assignTitle = async (req, res) => {
-  const { title, username } = req.body; //username is the user to whom the title is to be assigned
+  const { title, slug, username } = req.body; //username is the user to whom the title is to be assigned
   const assigningUserId = req.user.id; // The userId of the user making the request
   try {
     const query = userQueires.assignTitleFromUsername;
-    const values = [title, assigningUserId, username];
+    const values = [title, assigningUserId, username, slug];
     const result = await db.query(query, values);
+    console.dir(result.rows, { depth: null });
     if (result.rowCount > 0) {
-      res.status(200).json({ message: "Title assigned successfully" });
+      switch (result.rows[0].result) {
+        case "title_assigned":
+          res.status(200).json({ message: "Title assigned successfully" });
+          break;
+        case "title_already_assigned":
+          res.status(400).json({ error: "Title already assigned" });
+          break;
+        case "student_not_found":
+          res.status(404).json({ error: "Student not found" });
+          break;
+        default:
+          res.status(500).json({ error: "Unknown error" });
+      }
     } else {
-      res.status(404).json({ error: "Student not found or invalid role" });
+      res.status(404).json({ error: "Server Error" });
     }
   } catch (error) {
     console.error(error);
