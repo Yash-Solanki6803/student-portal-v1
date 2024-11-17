@@ -7,7 +7,9 @@ const auth = (req, res, next) => {
   const token = req.cookies["spv1-auth"];
   // If no token is provided
   if (!token) {
-    return res.status(401).json({ message: "No token, authorization denied" });
+    return res
+      .status(401)
+      .json({ message: "No token, authorization denied. Please log in first" });
   }
 
   try {

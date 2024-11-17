@@ -5,17 +5,7 @@ export default {
   getUserByUsername: `SELECT * FROM users WHERE username = $1`,
   getUserByEmail: `SELECT * FROM users WHERE email = $1`,
   getUserProfileFromId: `SELECT 
-                              users.id, 
-                              users.username, 
-                              users.first_name, 
-                              users.middle_name, 
-                              users.last_name, 
-                              users.profile_picture_url, 
-                              users.branch, 
-                              users.division, 
-                              users.leetcode_id, 
-                              users.role, 
-                              users.email, 
+                              users.*, 
                               COALESCE(json_agg(titles.title_name) FILTER (WHERE titles.title_name IS NOT NULL), '[]') AS titles
                           FROM 
                               users
@@ -74,4 +64,6 @@ export default {
                                 END AS result;
 
                             `,
+  updatePassword: `UPDATE users SET password = $1 WHERE id = $2;`,
+  checkEmailExists: `SELECT id FROM users WHERE email = $1 AND id != $2`,
 };
