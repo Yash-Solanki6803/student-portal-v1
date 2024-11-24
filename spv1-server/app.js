@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
 import roleRoutes from "./routes/roleRoutes.js";
-import role from "./middleware/role.js";
+import leetcodeRoutes from "./routes/leetcodeRoutes.js";
 import cookieParser from "cookie-parser";
 
 // Load environment variables
@@ -19,6 +19,7 @@ app.use(cookieParser());
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/role", roleRoutes);
+app.use("/api/leetcode", leetcodeRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {

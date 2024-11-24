@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import db from "../config/db.js";
-import userQueires from "../queries/userQueires.js";
+import userQueires from "../queries/userQueries.js";
 import { isValidEmail } from "../lib/utils/index.js";
 
 // Register a new user

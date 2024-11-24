@@ -1,6 +1,6 @@
 // controllers/roleController.js
 import db from "../config/db.js"; // Import database connection
-import userQueires from "../queries/userQueires.js";
+import userQueires from "../queries/userQueries.js";
 
 const assignRole = async (req, res) => {
   const { username, newRole } = req.body; // newRole is the role to be assigned
